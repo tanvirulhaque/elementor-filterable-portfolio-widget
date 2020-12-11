@@ -72,11 +72,10 @@ function efpw_load_more_portfolio() {
     $html = ob_get_contents();
 	ob_get_clean();
 
-	$query           = $_REQUEST;
-	$query['offset'] = intval( $query['offset'] ) + $query['posts_per_page'];
+	$args['offset'] = intval( $args['offset'] ) + $args['posts_per_page'];
 
 	wp_send_json_success( [
-		'query' => $query,
+		'query' => $args,
 		'posts' => $html,
 	] );
 

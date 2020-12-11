@@ -22,9 +22,13 @@ jQuery('document').ready(function (){
 
                 $button.text('Load More');
 
+                // jQuery(".row.grid").append(response);
+
                 if (response.data.posts) {
 
-                    query.offset = response.data.query.query.offset;
+                    console.log(response);
+
+                    query.offset = response.data.query.offset;
                     
                     jQuery(".row.grid").append(response.data.posts);
 
