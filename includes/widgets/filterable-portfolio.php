@@ -78,20 +78,57 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
     protected function _register_controls() {
 
         $this->start_controls_section(
-            'content_section',
+            'portfolio_filter',
             [
-                'label' => __( 'Content', 'efpw' ),
+                'label' => __( 'Filter', 'efpw' ),
                 'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
 
         $this->add_control(
-            'url',
+            'show_filter',
             [
-                'label'       => __( 'URL to embed', 'efpw' ),
-                'type'        => \Elementor\Controls_Manager::TEXT,
-                'input_type'  => 'url',
-                'placeholder' => __( 'https://your-link.com', 'efpw' ),
+                'label'       => __( 'Show Filter', 'efpw' ),
+                'type'        => \Elementor\Controls_Manager::SWITCHER ,
+                'label_on' => __( 'Show', 'efpw' ),
+                'label_off' => __( 'Hide', 'efpw' ),
+                'return_value' => 'yes',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->end_controls_section();
+
+
+        $this->start_controls_section(
+            'filterable-portfolio',
+            [
+                'label' => __( 'Portfolio', 'efpw' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'per_page',
+            [
+                'label'     => __( 'Show Item Number', 'efpw' ),
+                'type'      => \Elementor\Controls_Manager::NUMBER,
+                'min'       => -1,
+                'max'       => 100,
+                'step'      => 1,
+                'default'   => 9,
+            ]
+        );
+
+        $this->add_control(
+            'enable_load_more',
+            [
+                'label'       => __( 'Enable Load More', 'efpw' ),
+                'type'        => \Elementor\Controls_Manager::SWITCHER ,
+                'label_on' => __( 'Yes', 'efpw' ),
+                'label_off' => __( 'No', 'efpw' ),
+                'return_value' => 'yes',
+                'default' => 'yes',
             ]
         );
 
@@ -122,7 +159,7 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
             });
         </script>
 
-        <div class="efpw-filterable-portfolio-section">
+        <div class="efpw-filterable-portfolio-section container">
 
             <div class="portfolio__filter text-center">
                 <ul class="list-unstyled">
@@ -183,7 +220,7 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
                     }
                     ?>
 
-                    <div class="col-md-4 mix <?php echo esc_attr( $project_assigned_cat ); ?>">
+                    <div class="column column-33 mix <?php echo esc_attr( $project_assigned_cat ); ?>">
                         <div class="portfolio__single-item">
                             <img src="<?php echo get_the_post_thumbnail_url( $portfolio_id, 'large' ); ?>"
                                  class="img-responsive" alt="<?php echo $portfolio_title; ?>">

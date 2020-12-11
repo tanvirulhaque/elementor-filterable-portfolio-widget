@@ -20,13 +20,16 @@
     border: 1px dotted #333;
     color: #333;
 }
-.grid .mix {
+.efpw-filterable-portfolio-section .row.grid {
+    flex-wrap: wrap;
+}
+.efpw-filterable-portfolio-section .grid .mix {
     display: none;
     opacity: 0;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 }
 .portfolio__single-item {
-    margin-top: 30px;
+    margin-top: 15px;
     overflow: hidden;
     position: relative;
     -webkit-transition: all 0.36s ease-in-out 0s;
@@ -39,7 +42,7 @@
 .portfolio__single-item__overlay {
     height: 100%;
     width: 100%;
-    background: rgba(255, 255, 149, 0.8) none repeat scroll 0 0;
+    background: rgba(238, 238, 238, 0.8) none repeat scroll 0 0;
     position: absolute;
     bottom: 0;
     left: 0;
