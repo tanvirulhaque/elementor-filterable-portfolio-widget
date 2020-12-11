@@ -109,7 +109,7 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
         );
 
         $this->add_control(
-            'per_page',
+            'portfolio_per_page',
             [
                 'label'     => __( 'Show Item Number', 'efpw' ),
                 'type'      => \Elementor\Controls_Manager::NUMBER,
@@ -146,8 +146,7 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
      */
     protected function render() {
 
-        $settings           = $this->get_settings_for_display();
-        $project_categories = get_terms( 'portfolio_cat' );
+        $settings = $this->get_settings_for_display();
 
         ?>
 
@@ -160,6 +159,12 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
         </script>
 
         <div class="efpw-filterable-portfolio-section container">
+
+            <?php 
+            $project_categories = get_terms( 'portfolio_cat' );
+            
+            if ( ( 'yes' == $settings['show_filter'] ) && $project_categories ) {
+            ?>
 
             <div class="portfolio__filter text-center">
                 <ul class="list-unstyled">
@@ -176,15 +181,24 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
                 </ul>
             </div>
 
+            <?php } ?>
+
             <div class="row grid">
                 <?php
-                $query = new WP_Query( array( 'posts_per_page' => 9, 'post_type' => 'portfolio' ) );
+                $query = new WP_Query( 
+                    array( 
+                        'post_type'      => 'portfolio',
+                        'posts_per_page' => $settings['portfolio_per_page'], 
+                        'orderby'        => 'date',
+                        'order'          => 'DESC',
+                        'post_status'    => 'publish',
+                    ) 
+                );
 
                 while ( $query->have_posts() ) : $query->the_post();
+
                     $portfolio_id = get_the_ID();
                     $portfolio_title = get_the_title();
-
-
                     $project_category = get_the_terms( $portfolio_id, 'portfolio_cat' );
 
                     if ( $project_category && ! is_wp_error( $project_category ) ) {
@@ -222,8 +236,7 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
 
                     <div class="column column-33 mix <?php echo esc_attr( $project_assigned_cat ); ?>">
                         <div class="portfolio__single-item">
-                            <img src="<?php echo get_the_post_thumbnail_url( $portfolio_id, 'large' ); ?>"
-                                 class="img-responsive" alt="<?php echo $portfolio_title; ?>">
+                            <img src="<?php echo get_the_post_thumbnail_url( $portfolio_id, 'large' ); ?>" class="img-responsive" alt="<?php echo $portfolio_title; ?>">
 
                             <div class="portfolio__single-item__overlay">
                                 <div class="portfolio__single-item__heading">
@@ -241,6 +254,25 @@ class EFPW_Filterable_Portfolio extends \Elementor\Widget_Base {
                 wp_reset_query();
                 ?>
             </div>
+
+            <?php if ( $settings['enable_load_more']  && $query ) { ?>
+
+                <?php 
+                $args = array(
+                    'post_type'      => 'portfolio',
+                    'posts_per_page' => 3,
+                    'offset'         => $settings['portfolio_per_page'],
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                    'post_status'    => 'publish',
+                );
+                ?>
+                
+                <div class="efpw-portfolio-load-more text-center">
+                    <a href="#" id="efpw-load-more" class="button" data-query="<?php echo esc_js( json_encode( $args ) );?>">Load More</a>
+                </div>
+            <?php } ?>
+
         </div>
 
         <?php

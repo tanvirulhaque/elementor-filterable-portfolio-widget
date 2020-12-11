@@ -196,9 +196,7 @@ if ( ! class_exists( 'EFPW_Elementor_Filterable_Portfolio' ) ) {
             $this->define_constants();
             $this->includes();
 
-
             add_action( 'elementor/widgets/widgets_registered', [ $this, 'init_widgets' ] );
-            // add_action( 'elementor/controls/controls_registered', [ $this, 'init_controls' ] );
             add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
         }
@@ -207,15 +205,25 @@ if ( ! class_exists( 'EFPW_Elementor_Filterable_Portfolio' ) ) {
          * Include plugin files
          */
         public function includes() {
+
             require_once( EFPW_PATH . 'includes/portfolio-post-type-taxonomy.php' );
+            require_once( EFPW_PATH . 'includes/plugin-function.php' );
+
         }
 
         /**
          * Enqueue plugin scripts
          */
         public function enqueue_scripts() {
+
             wp_enqueue_style( 'elementor-filterable-portfolio', EFPW_URL . 'assets/css/elementor-filterable-portfolio.css' );
+
             wp_enqueue_script( 'mixitup', EFPW_URL . 'assets/js/jquery.mixitup.min.js', ['jquery'], '1.5.5', true );
+
+            wp_enqueue_script( 'elementor-filterable-portfolio', EFPW_URL . 'assets/js/elementor-filterable-portfolio.js', ['jquery'], '1.0.0', true );
+
+            wp_localize_script( 'elementor-filterable-portfolio', 'loadMorePortfolio', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+
         }
 
         /**
@@ -234,25 +242,6 @@ if ( ! class_exists( 'EFPW_Elementor_Filterable_Portfolio' ) ) {
 
             // Register widget
             \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \EFPW_Filterable_Portfolio() );
-
-        }
-
-        /**
-         * Init Controls
-         *
-         * Include controls files and register them
-         *
-         * @since 1.0.0
-         *
-         * @access public
-         */
-        public function init_controls() {
-
-            // Include Control files
-            require_once( EFPW_PATH . 'includes/controls/test-control.php' );
-
-            // Register control
-            \Elementor\Plugin::$instance->controls_manager->register_control( 'control-type-', new \Test_Control() );
 
         }
         
